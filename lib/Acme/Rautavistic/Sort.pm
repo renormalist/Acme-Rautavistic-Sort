@@ -137,6 +137,8 @@ and space exploration.
 
 Steffen Schwigon, C<< <ss5 at renormalist.net> >>
 
+Felix Antonius Wilhelm Ostmann
+
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -176,12 +178,15 @@ L<http://search.cpan.org/dist/Acme-Rautavistic-Sort>
 =head1 ACKNOWLEDGEMENTS
 
 
+http://www.dangermouse.net/esoteric/dropsort.html
+
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2008 Steffen Schwigon, all rights reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =cut
 

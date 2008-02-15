@@ -50,9 +50,9 @@ my @bigarray = map { rand } 1..100000;
 print "Anzahl: ", (scalar dropsort5 @bigarray), "\n";
 
 timethese(100, {
-               'dropsort1' => sub { dropsort1 @bigarray },
-               'dropsort2' => sub { dropsort2 @bigarray },
-               'dropsort3' => sub { dropsort3 @bigarray },
-               'dropsort4' => sub { dropsort4 @bigarray },
-               'dropsort5' => sub { dropsort5 @bigarray },
-              });
+                'dropsort1' => sub { dropsort1 @bigarray },
+                'dropsort2' => sub { dropsort2 @bigarray },
+                'dropsort3' => sub { dropsort3 @bigarray },
+                'dropsort4' => sub { dropsort4 @bigarray },
+                'dropsort5' => sub { dropsort5 @bigarray },
+               });
