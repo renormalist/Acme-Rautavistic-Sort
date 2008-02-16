@@ -1,6 +1,6 @@
 package Acme::Rautavistic::Sort;
 
-#use warnings;
+use warnings;
 use strict;
 
 require Exporter;
@@ -9,27 +9,22 @@ use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
 
-@EXPORT_OK   = qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5);
-%EXPORT_TAGS = (all => [qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5)]);
+@EXPORT_OK   = qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5 dropsort6);
+%EXPORT_TAGS = (all => [qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5 dropsort6)]);
 
 #use Data::Dumper; print STDERR Dumper(\@res);
 
 *{dropsort} = *{dropsort5};
 
 sub dropsort1 {
-#    no warnings;
     return unless @_;
     my @res = ($_[0]);
-    #@res = scalar @_; # Cheat: allozieren
     $_[$_] ge $res[-1] && push @res, $_[$_] for 1 .. $#_;
     @res;
 }
 
 sub dropsort2 {
-#    no warnings;
     my @res = @_;
-    #@res = scalar @_; # Cheat: allozieren
-
     for ($_ = 1; $_ < @res; $_++) {
         $res[$_] lt $res[$_-1] && splice(@res, $_--, 1);
     }
@@ -59,26 +54,24 @@ sub dropsort4 {
 }
 
 sub dropsort5 {
-#    no warnings;
+    no warnings;
     my $last;
     map { $_ ge $last ? $last = $_ : () } @_;
 }
 
-# sub dropsort {
-#     return unless @_;
+sub dropsort6 {
+    no warnings;
+    my $comparator = shift;
+    my $last;
+    #map { (&$comparator($last, $_) >= 0) ? $last = $_ : () } @_;
+    #map { (($_ <=> $last) >= 0) ? $last = $_ : () } @_;
+    map { local $a = $_; local $b = $last; &$comparator >= 0} ? $last = $_ : () } @_;
+}
 
-#     my @res = map {
-#                    $_ == 0 ? $_[$_]
-#                            : $_[$_] ge $res[-1] ? $_[$_]
-#                                                 : ()
-#                   } 0..$#_; # (@_-1);
-#     use Data::Dumper; print STDERR Dumper(\@res);
-#     return @res;
-# }
 
 =head1 NAME
 
-Acme::Rautavistic::Sort - Silly rautavistic sort algorithms
+Acme::Rautavistic::Sort - Rautavistic sort functions
 
 =head1 VERSION
 
@@ -137,16 +130,19 @@ fashion, dropsort promises to revolutionise the sorting of data in
 fields as diverse as commercial finance, government record-keeping,
 and space exploration.
 
-=head2 bogosort
-
 =head1 AUTHOR
 
-Steffen Schwigon, C<< <ss5 at renormalist.net> >>
+Steffen Schwigon, C<< <ss5@renormalist.net> >>
 
 Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt
 coordinator)
 
 =head1 BUGS
+
+dropsort currently only sorts by string comparison. This will
+hopefully be fixed by being able to argument it with a comparison
+function, similar to Perl's sort.
+
 
 Please report any bugs or feature requests to
 C<bug-acme-rautavistic-sort at rt.cpan.org>, or through the web
