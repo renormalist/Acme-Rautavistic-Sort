@@ -90,11 +90,25 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-...
+ use Acme::Rautavistic::Sort ':all';
+ @res = dropsort(qw(3 2 3 1 5));      # qw(3 3 5)
+ @res = dropsort(qw(cc bb dd aa ee)); # qw(cc dd ee)
+
 
 =head1 DESCRIPTION
 
-Taken from http://www.dangermouse.net/esoteric/dropsort.html:
+This module provides rautavistic sort functions. For more description
+of the functions see below.
+
+=head1 EXPORT
+
+ dropsort
+
+=head1 FUNCTIONS
+
+=head2 dropsort
+
+From http://www.dangermouse.net/esoteric/dropsort.html:
 
 Dropsort is a fast, one-pass sorting algorithm suitable for many
 applications.
@@ -123,29 +137,23 @@ fashion, dropsort promises to revolutionise the sorting of data in
 fields as diverse as commercial finance, government record-keeping,
 and space exploration.
 
-=head1 EXPORT
-
-...
-
-=head1 FUNCTIONS
-
-=head2 dropsort
-
 =head2 bogosort
 
 =head1 AUTHOR
 
 Steffen Schwigon, C<< <ss5 at renormalist.net> >>
 
-Felix Antonius Wilhelm Ostmann
+Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt
+coordinator)
 
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-acme-rautavistic-sort at rt.cpan.org>, or through the web interface at
+C<bug-acme-rautavistic-sort at rt.cpan.org>, or through the web
+interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Acme-Rautavistic-Sort>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+I will be notified, and then you'll automatically be notified of
+progress on your bug as I make changes.
 
 =head1 SUPPORT
 
@@ -177,9 +185,16 @@ L<http://search.cpan.org/dist/Acme-Rautavistic-Sort>
 
 =head1 ACKNOWLEDGEMENTS
 
+For more information about rautavistic sort and rautavistic in general
+see
 
-http://www.dangermouse.net/esoteric/dropsort.html
+=over 4
 
+=item * http://www.dangermouse.net/esoteric/dropsort.html
+
+=item * http://www.rautavistik.de (in german)
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 
