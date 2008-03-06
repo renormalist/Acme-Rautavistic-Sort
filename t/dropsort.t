@@ -38,10 +38,21 @@ is_deeply([dropsort (1, 2, 5, 3, 4, undef)], [ 1, 2, 5 ], 'undef does not follow
 is_deeply([dropsort (1, 2, undef, 5, 3, 4, undef)], [ 1, 2, 5 ], 'undef in the middle attack');
 is_deeply([undef], [ undef ], 'single undef');
 
+no warnings;
 TODO: {
-    local $TODO = "numeric sort by allowing comparison functions";
-    my @res = dropsort6 (sub {$a <=> $b}, 1, 11, 2);
+#     local $TODO = "numeric sort via comparison function";
+#     my @res = dropsort6 sub { $_[0] <=> $_[1] }, 1, 11, 2;
+#     is_deeply(\@res, [ 1, 11 ], 'numeric' );
+#     @res = dropsort6 1, 11, 2;
+#     is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
+
+
+    local $TODO = "numeric sort via comparison function";
+    my @res = dropsort6 sub { Test::More::diag "$a -- $b"; $a <=> $b }, 1, 11, 2;
     is_deeply(\@res, [ 1, 11 ], 'numeric' );
+    @res = dropsort6 1, 11, 2;
+    is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
+
 };
 
 # -------------- Benchmarks -----------------------
@@ -50,7 +61,7 @@ __END__
 
 use Benchmark qw(:all) ;
 
-my @bigarray = map { rand } 1..10_000;
+my @bigarray = map { rand } 1..30_000;
 print "Anzahl: ", (scalar dropsort5 @bigarray), "\n";
 timethese(200, {
                 'dropsort1' => sub { dropsort1 @bigarray },
@@ -58,5 +69,5 @@ timethese(200, {
                 'dropsort3' => sub { dropsort3 @bigarray },
                 'dropsort4' => sub { dropsort4 @bigarray },
                 'dropsort5' => sub { dropsort5 @bigarray },
-                'dropsort6' => sub { dropsort5 @bigarray },
+                'dropsort6' => sub { dropsort6 @bigarray },
                });

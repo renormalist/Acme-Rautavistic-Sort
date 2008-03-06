@@ -8,7 +8,7 @@ static int
 dropsort (IV *list, int count)
 {
         return count;
-};
+}
 
 /* alles unter MODULE von xsubpp, oben drüber normaler C code */
 
@@ -21,7 +21,7 @@ dropsort (...)
                 int result_length, i;
          PPCODE:
                 list = malloc(sizeof(IV) * items); /* list allokieren IntegerValues */
-                for (i=0; i < items; i++) {       /* items ist Anzahl Args, von xsubpp gesetzt */
+                for (i=0; i < items; i++) {        /* items ist Anzahl Args, von xsubpp gesetzt */
                     list[i] = SvIV(ST(i));         /* */
                 }
                 result_length = dropsort(list, items);     /* annahme: derzeit in place, und anzahl der zu nutzenden elemente zurückgeben */

@@ -3,6 +3,7 @@ package Acme::Rautavistic::Sort;
 use warnings;
 use strict;
 
+use Scalar::Util 'reftype';
 require Exporter;
 
 use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
@@ -59,14 +60,32 @@ sub dropsort5 {
     map { $_ ge $last ? $last = $_ : () } @_;
 }
 
+#sub dropsort6(&@) {
 sub dropsort6 {
     no warnings;
-    my $comparator = shift;
+    my $comparator =
+     reftype($_[0]) eq 'CODE'
+      ? shift
+       : sub {
+              $a cmp $b
+             };
     my $last;
-    #map { (&$comparator($last, $_) >= 0) ? $last = $_ : () } @_;
-    #map { (($_ <=> $last) >= 0) ? $last = $_ : () } @_;
-    map { local $a = $_; local $b = $last; &$comparator >= 0} ? $last = $_ : () } @_;
+    map {
+         local $::a = $_;
+         local $::b = $last;
+         $comparator->() >= 0 ? $last = $_ : ()
+        } @_;
 }
+
+sub foosort
+{
+    my @res = dropsort6 sub { $a <=> $b }, 1, 11, 2;
+    print STDERR (join "#", @res);
+}
+
+# TODOs / Ideas:
+#   Attribute : Rautavistic(dropsort)
+#    an Arrays, behält immer dropsort-Sortierung bei, nach jeder Änderung am Array
 
 
 =head1 NAME
@@ -84,20 +103,19 @@ our $VERSION = '0.01';
 =head1 SYNOPSIS
 
  use Acme::Rautavistic::Sort ':all';
+ 
+ # default alphanumeric comparison
  @res = dropsort(qw(3 2 3 1 5));      # qw(3 3 5)
  @res = dropsort(qw(cc bb dd aa ee)); # qw(cc dd ee)
+ 
+ # numeric comparison
+ @res = dropsort6 sub { $_[0] <=> $_[1] }, 1, 11, 2;
 
 
 =head1 DESCRIPTION
 
 This module provides rautavistic sort functions. For more description
 of the functions see below.
-
-=head1 EXPORT
-
- dropsort
-
-=head1 FUNCTIONS
 
 =head2 dropsort
 
@@ -129,6 +147,24 @@ widespread use because of its versatility and usefulness. In similar
 fashion, dropsort promises to revolutionise the sorting of data in
 fields as diverse as commercial finance, government record-keeping,
 and space exploration.
+
+=head1 EXPORT
+
+ dropsort
+
+=head1 FUNCTIONS
+
+=head2 dropsort
+
+ @SORTED = dropsort @VALUES
+ @SORTED = dropsort sub { $_[0] <=> $_[1]}, @VALUES
+
+Does drop sort.
+
+If the first argument is a sub reference, use it to do the comparison
+of two values.  Please note, that due to the nature of the algorithm,
+just reversing $_[0] and $_[1] does not reverse sort the result.
+
 
 =head1 AUTHOR
 
