@@ -40,6 +40,7 @@ is_deeply([undef], [ undef ], 'single undef');
 
 no warnings;
 TODO: {
+
 #     local $TODO = "numeric sort via comparison function";
 #     my @res = dropsort6 sub { $_[0] <=> $_[1] }, 1, 11, 2;
 #     is_deeply(\@res, [ 1, 11 ], 'numeric' );
@@ -48,9 +49,10 @@ TODO: {
 
 
     local $TODO = "numeric sort via comparison function";
-    my @res = dropsort6 sub { Test::More::diag "$a -- $b"; $a <=> $b }, 1, 11, 2;
+
+    my @res = dropsort sub { Test::More::diag "$a -- $b"; $a <=> $b }, 1, 11, 2;
     is_deeply(\@res, [ 1, 11 ], 'numeric' );
-    @res = dropsort6 1, 11, 2;
+    @res = dropsort 1, 11, 2;
     is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
 
 };
@@ -59,15 +61,15 @@ TODO: {
 
 __END__
 
-use Benchmark qw(:all) ;
+# use Benchmark qw(:all) ;
 
-my @bigarray = map { rand } 1..30_000;
-print "Anzahl: ", (scalar dropsort5 @bigarray), "\n";
-timethese(200, {
-                'dropsort1' => sub { dropsort1 @bigarray },
-                'dropsort2' => sub { dropsort2 @bigarray },
-                'dropsort3' => sub { dropsort3 @bigarray },
-                'dropsort4' => sub { dropsort4 @bigarray },
-                'dropsort5' => sub { dropsort5 @bigarray },
-                'dropsort6' => sub { dropsort6 @bigarray },
-               });
+# my @bigarray = map { rand } 1..30_000;
+# print "Anzahl: ", (scalar dropsort5 @bigarray), "\n";
+# timethese(200, {
+#                 'dropsort1' => sub { dropsort1 @bigarray },
+#                 'dropsort2' => sub { dropsort2 @bigarray },
+#                 'dropsort3' => sub { dropsort3 @bigarray },
+#                 'dropsort4' => sub { dropsort4 @bigarray },
+#                 'dropsort5' => sub { dropsort5 @bigarray },
+#                 'dropsort6' => sub { dropsort6 @bigarray },
+#                });

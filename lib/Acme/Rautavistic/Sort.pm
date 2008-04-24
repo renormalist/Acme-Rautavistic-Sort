@@ -15,73 +15,75 @@ use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
 
 #use Data::Dumper; print STDERR Dumper(\@res);
 
-*{dropsort} = *{dropsort5};
+# choose the best one
+# *{dropsort} = *{dropsort5};
 
-sub dropsort1 {
-    return unless @_;
-    my @res = ($_[0]);
-    $_[$_] ge $res[-1] && push @res, $_[$_] for 1 .. $#_;
-    @res;
-}
+# sub dropsort1 {
+#     return unless @_;
+#     my @res = ($_[0]);
+#     $_[$_] ge $res[-1] && push @res, $_[$_] for 1 .. $#_;
+#     @res;
+# }
 
-sub dropsort2 {
-    my @res = @_;
-    for ($_ = 1; $_ < @res; $_++) {
-        $res[$_] lt $res[$_-1] && splice(@res, $_--, 1);
-    }
-    @res;
-}
+# sub dropsort2 {
+#     my @res = @_;
+#     for ($_ = 1; $_ < @res; $_++) {
+#         $res[$_] lt $res[$_-1] && splice(@res, $_--, 1);
+#     }
+#     @res;
+# }
 
-sub dropsort3 {
-    my $last;
-    grep
-    {
-        (not defined $last)
-         ||
-        (defined $_ && $_ ge $last)
-         and
-        ($last = $_ or 1)
-    } @_;
-}
+# sub dropsort3 {
+#     my $last;
+#     grep
+#     {
+#         (not defined $last)
+#          ||
+#         (defined $_ && $_ ge $last)
+#          and
+#         ($last = $_ or 1)
+#     } @_;
+# }
 
-sub dropsort4 {
-    my $last;
-    map
-    {
-     (not defined $last) || (defined $_ && $_ ge $last)
-       ? $last = $_
-       : ()
-    } @_;
-}
+# sub dropsort4 {
+#     my $last;
+#     map
+#     {
+#      (not defined $last) || (defined $_ && $_ ge $last)
+#        ? $last = $_
+#        : ()
+#     } @_;
+# }
 
-sub dropsort5 {
+# sub dropsort5 {
+sub dropsort {
     no warnings;
     my $last;
     map { $_ ge $last ? $last = $_ : () } @_;
 }
 
-#sub dropsort6(&@) {
-sub dropsort6 {
-    no warnings;
-    my $comparator =
-     reftype($_[0]) eq 'CODE'
-      ? shift
-       : sub {
-              $a cmp $b
-             };
-    my $last;
-    map {
-         local $::a = $_;
-         local $::b = $last;
-         $comparator->() >= 0 ? $last = $_ : ()
-        } @_;
-}
+# #sub dropsort6(&@) {
+# sub dropsort6 {
+#     no warnings;
+#     my $comparator =
+#      reftype($_[0]) eq 'CODE'
+#       ? shift
+#        : sub {
+#               $a cmp $b
+#              };
+#     my $last;
+#     map {
+#          local $::a = $_;
+#          local $::b = $last;
+#          $comparator->() >= 0 ? $last = $_ : ()
+#         } @_;
+# }
 
-sub foosort
-{
-    my @res = dropsort6 sub { $a <=> $b }, 1, 11, 2;
-    print STDERR (join "#", @res);
-}
+# sub foosort
+# {
+#     my @res = dropsort6 sub { $a <=> $b }, 1, 11, 2;
+#     print STDERR (join "#", @res);
+# }
 
 # TODOs / Ideas:
 #   Attribute : Rautavistic(dropsort)
