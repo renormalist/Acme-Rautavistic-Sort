@@ -1,3 +1,9 @@
+2008-11-19  Steffen Schwigon  <ss5@renormalist.net>
+
+	* 0.02
+
+	* "dropsortx" allows comparator sub, eg. for numerical comparisons
+
 2008-04-24  Steffen Schwigon  <ss5@renormalist.net>
 
 	* 0.01

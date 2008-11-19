@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More 'no_plan';
+use Test::More tests => 28;
 use Acme::Rautavistic::Sort ':all';
 
 # plan tests => 11;
@@ -38,24 +38,14 @@ is_deeply([dropsort (1, 2, 5, 3, 4, undef)], [ 1, 2, 5 ], 'undef does not follow
 is_deeply([dropsort (1, 2, undef, 5, 3, 4, undef)], [ 1, 2, 5 ], 'undef in the middle attack');
 is_deeply([undef], [ undef ], 'single undef');
 
-no warnings;
-TODO: {
+#no warnings;
 
-#     local $TODO = "numeric sort via comparison function";
-#     my @res = dropsort6 sub { $_[0] <=> $_[1] }, 1, 11, 2;
-#     is_deeply(\@res, [ 1, 11 ], 'numeric' );
-#     @res = dropsort6 1, 11, 2;
-#     is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
-
-
-    local $TODO = "numeric sort via comparison function";
-
-    my @res = dropsort sub { Test::More::diag "$a -- $b"; $a <=> $b }, 1, 11, 2;
-    is_deeply(\@res, [ 1, 11 ], 'numeric' );
-    @res = dropsort 1, 11, 2;
-    is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
-
-};
+my @res = dropsortx { $a <=> $b } 1, 11, 2;
+is_deeply(\@res, [ 1, 11 ], 'numeric' ); # sic!, we are *drop* sort ...
+@res = dropsortx { $a cmp $b } 1, 11, 2;
+is_deeply(\@res, [ 1, 11, 2 ], 'explicitely alpha numeric' );
+@res = dropsort 1, 11, 2;
+is_deeply(\@res, [ 1, 11, 2 ], 'default alpha numeric' );
 
 # -------------- Benchmarks -----------------------
 
@@ -71,5 +61,5 @@ __END__
 #                 'dropsort3' => sub { dropsort3 @bigarray },
 #                 'dropsort4' => sub { dropsort4 @bigarray },
 #                 'dropsort5' => sub { dropsort5 @bigarray },
-#                 'dropsort6' => sub { dropsort6 @bigarray },
+#                 'dropsortx' => sub { dropsortx @bigarray },
 #                });

@@ -3,6 +3,8 @@ package Acme::Rautavistic::Sort;
 use warnings;
 use strict;
 
+our $VERSION = '0.02';
+
 use Scalar::Util 'reftype';
 require Exporter;
 
@@ -10,80 +12,33 @@ use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
 
 @ISA = qw(Exporter);
 
-@EXPORT_OK   = qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5 dropsort6);
-%EXPORT_TAGS = (all => [qw(dropsort dropsort1 dropsort2 dropsort3 dropsort4 dropsort5 dropsort6)]);
+@EXPORT_OK   = qw(dropsort dropsortx);
+%EXPORT_TAGS = (all => [ qw(dropsort dropsortx) ]);
 
-#use Data::Dumper; print STDERR Dumper(\@res);
-
-# choose the best one
-# *{dropsort} = *{dropsort5};
-
-# sub dropsort1 {
-#     return unless @_;
-#     my @res = ($_[0]);
-#     $_[$_] ge $res[-1] && push @res, $_[$_] for 1 .. $#_;
-#     @res;
-# }
-
-# sub dropsort2 {
-#     my @res = @_;
-#     for ($_ = 1; $_ < @res; $_++) {
-#         $res[$_] lt $res[$_-1] && splice(@res, $_--, 1);
-#     }
-#     @res;
-# }
-
-# sub dropsort3 {
-#     my $last;
-#     grep
-#     {
-#         (not defined $last)
-#          ||
-#         (defined $_ && $_ ge $last)
-#          and
-#         ($last = $_ or 1)
-#     } @_;
-# }
-
-# sub dropsort4 {
-#     my $last;
-#     map
-#     {
-#      (not defined $last) || (defined $_ && $_ ge $last)
-#        ? $last = $_
-#        : ()
-#     } @_;
-# }
-
-# sub dropsort5 {
 sub dropsort {
-    no warnings;
-    my $last;
-    map { $_ ge $last ? $last = $_ : () } @_;
+        no warnings 'uninitialized';
+        my $last;
+        map { $_ ge $last ? $last = $_ : () } @_;
 }
 
-# #sub dropsort6(&@) {
-# sub dropsort6 {
-#     no warnings;
-#     my $comparator =
-#      reftype($_[0]) eq 'CODE'
-#       ? shift
-#        : sub {
-#               $a cmp $b
-#              };
-#     my $last;
-#     map {
-#          local $::a = $_;
-#          local $::b = $last;
-#          $comparator->() >= 0 ? $last = $_ : ()
-#         } @_;
-# }
+sub dropsortx(&@)
+{
+        # magic variables $a and $b
+        use vars qw($a $b);
+        no strict 'refs';
+        no warnings 'uninitialized';
+        my $caller = caller;
+        local(*{$caller."::a"}) = \my $a;
+        local(*{$caller."::b"}) = \my $b;
 
-# sub foosort
-# {
-#     my @res = dropsort6 sub { $a <=> $b }, 1, 11, 2;
-#     print STDERR (join "#", @res);
-# }
+        my $comparator = shift;
+        my $last;
+        map {
+             $a = $_;
+             $b = $last;
+             $comparator->() >= 0 ? $last = $_ : ()
+            } @_;
+}
 
 # TODOs / Ideas:
 #   Attribute : Rautavistic(dropsort)
@@ -94,24 +49,16 @@ sub dropsort {
 
 Acme::Rautavistic::Sort - Rautavistic sort functions
 
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
-
 =head1 SYNOPSIS
 
  use Acme::Rautavistic::Sort ':all';
  
  # default alphanumeric comparison
- @res = dropsort(qw(3 2 3 1 5));      # qw(3 3 5)
- @res = dropsort(qw(cc bb dd aa ee)); # qw(cc dd ee)
+ @res = dropsort( qw(3 2 3 1 5) );      # qw(3 3 5)
+ @res = dropsort( qw(cc bb dd aa ee) ); # qw(cc dd ee)
  
- # numeric comparison
- @res = dropsort6 sub { $_[0] <=> $_[1] }, 1, 11, 2;
+ # force numeric comparison (or other comparators)
+ @res = dropsortx { $a <=> $b } 1, 11, 2;
 
 
 =head1 DESCRIPTION
@@ -150,22 +97,28 @@ fashion, dropsort promises to revolutionise the sorting of data in
 fields as diverse as commercial finance, government record-keeping,
 and space exploration.
 
-=head1 EXPORT
-
- dropsort
-
 =head1 FUNCTIONS
 
 =head2 dropsort
 
- @SORTED = dropsort @VALUES
- @SORTED = dropsort sub { $_[0] <=> $_[1]}, @VALUES
+Drop sort an array:
 
-Does drop sort.
+    @SORTED = dropsort @VALUES
 
-If the first argument is a sub reference, use it to do the comparison
-of two values.  Please note, that due to the nature of the algorithm,
-just reversing $_[0] and $_[1] does not reverse sort the result.
+Values are compared using string comparison (i.e., C<cmp>). Use
+dropsortx to specify alternate comparators.
+
+=head2 dropsortx
+
+Like dropsort but additionally takes a comparator:
+
+    @SORTED = dropsortx { $a <=> $b } @VALUES
+
+Use the magic variables B<$a> and B<$b> for the comparison of two
+values.
+
+Please note, that due to the nature of the algorithm, just reversing
+$a and $b does not just reverse the result list.
 
 
 =head1 AUTHOR
@@ -176,11 +129,6 @@ Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt
 coordinator)
 
 =head1 BUGS
-
-dropsort currently only sorts by string comparison. This will
-hopefully be fixed by being able to argument it with a comparison
-function, similar to Perl's sort.
-
 
 Please report any bugs or feature requests to
 C<bug-acme-rautavistic-sort at rt.cpan.org>, or through the web
