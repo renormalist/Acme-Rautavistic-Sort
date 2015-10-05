@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - migrate dist to Dist::Zilla - no functional changes
 
 0.02      2008-11-19
   - "dropsortx" allows comparator sub, eg. for numerical comparisons
