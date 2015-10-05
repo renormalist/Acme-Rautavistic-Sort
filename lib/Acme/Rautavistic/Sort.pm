@@ -42,6 +42,8 @@ sub dropsortx(&@)
             } @_;
 }
 
+1; # End of Acme::Rautavistic::Sort
+
 # TODOs / Ideas:
 #   Attribute : Rautavistic(dropsort)
 #    an Arrays, always keep dropsort sort order, after each change on array
@@ -135,5 +137,3 @@ see
 =item * http://www.rautavistik.de (in german)
 
 =back
-
-1; # End of Acme::Rautavistic::Sort
