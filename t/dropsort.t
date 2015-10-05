@@ -40,6 +40,7 @@ is_deeply([undef], [ undef ], 'single undef');
 
 #no warnings;
 
+no warnings 'uninitialized';
 my @res = dropsortx { $a <=> $b } 1, 11, 2;
 is_deeply(\@res, [ 1, 11 ], 'numeric' ); # sic!, we are *drop* sort ...
 @res = dropsortx { $a cmp $b } 1, 11, 2;

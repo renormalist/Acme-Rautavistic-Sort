@@ -1,7 +1,9 @@
 package Acme::Rautavistic::Sort;
+# ABSTRACT: Rautavistic sort functions
 
 use warnings;
 use strict;
+use 5.006;
 
 our $VERSION = '0.02';
 
@@ -42,21 +44,16 @@ sub dropsortx(&@)
 
 # TODOs / Ideas:
 #   Attribute : Rautavistic(dropsort)
-#    an Arrays, behält immer dropsort-Sortierung bei, nach jeder Änderung am Array
-
-
-=head1 NAME
-
-Acme::Rautavistic::Sort - Rautavistic sort functions
+#    an Arrays, always keep dropsort sort order, after each change on array
 
 =head1 SYNOPSIS
 
  use Acme::Rautavistic::Sort ':all';
- 
+ #
  # default alphanumeric comparison
  @res = dropsort( qw(3 2 3 1 5) );      # qw(3 3 5)
  @res = dropsort( qw(cc bb dd aa ee) ); # qw(cc dd ee)
- 
+ #
  # force numeric comparison (or other comparators)
  @res = dropsortx { $a <=> $b } 1, 11, 2;
 
@@ -121,51 +118,12 @@ Please note, that due to the nature of the algorithm, just reversing
 $a and $b does not just reverse the result list.
 
 
-=head1 AUTHOR
-
-Steffen Schwigon, C<< <ss5@renormalist.net> >>
+=head1 ACKNOWLEDGEMENTS
 
 Felix Antonius Wilhelm Ostmann (benchmark, optimization and stunt
 coordinator)
 
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-acme-rautavistic-sort at rt.cpan.org>, or through the web
-interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Acme-Rautavistic-Sort>.
-I will be notified, and then you'll automatically be notified of
-progress on your bug as I make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Acme::Rautavistic::Sort
-
-You can also look for information at:
-
-=over 4
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Acme-Rautavistic-Sort>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Acme-Rautavistic-Sort>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Acme-Rautavistic-Sort>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Acme-Rautavistic-Sort>
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
+=head1 MORE INFO
 
 For more information about rautavistic sort and rautavistic in general
 see
@@ -177,14 +135,5 @@ see
 =item * http://www.rautavistik.de (in german)
 
 =back
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2008 Steffen Schwigon, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1; # End of Acme::Rautavistic::Sort

@@ -1,3 +1,5 @@
+.*
+!.gitignore
 blib*
 Makefile
 Makefile.old
@@ -10,4 +12,5 @@ Acme-Rautavistic-Sort-*
 cover_db
 lib/Acme/Rautavistic/Sort/XS.c
 MANIFEST.bak
-
+Debian_CPANTS.txt
+nytprof*
